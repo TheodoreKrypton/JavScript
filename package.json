@@ -1,0 +1,26 @@
+{
+  "name": "javscript",
+  "version": "0.0.0",
+  "description": "JavPy in Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "node.exe index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheodoreKrypton/javscript.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/TheodoreKrypton/javscript/issues"
+  },
+  "homepage": "https://github.com/TheodoreKrypton/javscript#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "jsdom": "^16.3.0",
+    "ws": "^7.3.1"
+  }
+}
