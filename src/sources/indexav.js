@@ -22,11 +22,8 @@ const getInfoFromCard = (card) => {
 
 const searchByActressInPage = async (actress, n) => {
   const rsp = await requester.get(`/actor/${encodeURI(actress)}?page=${n}`);
-  console.log(rsp.status);
   const dom = new JSDOM(rsp.data);
-  const cards = [...dom.window.document.querySelectorAll(".video_column")];
-  console.log(cards.length);
-  return cards.map(getInfoFromCard);
+  return [...dom.window.document.querySelectorAll(".video_column")].map(getInfoFromCard);
 }
 
 const searchByActress = async (actress) => {
@@ -36,7 +33,6 @@ const searchByActress = async (actress) => {
   if (!ul) {
     return searchByActressInPage(actress, 1);
   } else {
-    console.log([...ul.querySelectorAll("li")]);
     return [...ul.querySelectorAll("li")].map((li) => {
       const page = li.textContent.trim();
       return searchByActressInPage(actress, page);

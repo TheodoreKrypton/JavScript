@@ -38,8 +38,3 @@ module.exports = {
     }
   }
 }
-
-
-async function* run(promises) {
-
-}

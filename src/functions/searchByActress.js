@@ -18,26 +18,27 @@ const searchByActress = async (ws, reqId, actress) => {
       return;
     }
   }
-  (async () => {
-    [sources.indexav, sources.warashiAsianPornstarsFr].forEach((source) => {
-      source.searchByActress(actress).then((rsp) => {
-        if (!rsp) {
-          return;
-        }
-        if (rsp.length > 0 && rsp[0] instanceof Promise) {
-          rsp.forEach((r) => {
-            r.then((response) => {
-              if (response) {
-                ws.send(JSON.stringify({ response, reqId }));
-              }
-            })
+  sources.warashiAsianPornstarsFr.getActressInfo(actress).then((rsp) => {
+    ws.send(JSON.stringify({ response: rsp, reqId }))
+  });
+  [sources.indexav, sources.warashiAsianPornstarsFr].forEach((source) => {
+    source.searchByActress(actress).then((rsp) => {
+      if (!rsp) {
+        return;
+      }
+      if (rsp.length > 0 && rsp[0] instanceof Promise) {
+        rsp.forEach((r) => {
+          r.then((response) => {
+            if (response) {
+              ws.send(JSON.stringify({ response, reqId }));
+            }
           })
-        } else {
-          ws.send(JSON.stringify({ response: rsp, reqId }));
-        }
-      });
-    })
-  })();
+        })
+      } else {
+        ws.send(JSON.stringify({ response: rsp, reqId }));
+      }
+    });
+  })
 }
 
 module.exports = {

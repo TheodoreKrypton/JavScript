@@ -134,3 +134,13 @@ module.exports = {
   searchByCode,
   getNewlyReleased,
 };
+
+
+(async () => {
+  try {
+    const rsp = await requester.get(`/showlist/new/1/release`);
+  } catch (err) {
+    const dom = new JSDOM(err.response.data, { runScripts: "dangerously" });
+    console.log(dom.window.document.body.innerHTML);
+  }
+})()
