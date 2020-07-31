@@ -44,12 +44,12 @@ const translate2Jp = async (actress) => {
     return name;
   }
 
-  name = getNameInCard(actressLower, dom.window.document.querySelector('#bloc-resultats-conteneur-pornostars').querySelector('.resultat-pornostar'));
+  name = getNameInCard(actressLower, dom.window.document.querySelector('#bloc-resultats-conteneur-pornostars > .resultat-pornostar'));
   if (name) {
     return name;
   }
 
-  name = getNameInCard(actressLower, dom.window.document.querySelector('#bloc-resultats-conteneur-castings').querySelector('.resultat-pornostar'));
+  name = getNameInCard(actressLower, dom.window.document.querySelector('#bloc-resultats-conteneur-castings > .resultat-pornostar'));
   if (name) {
     return name;
   }

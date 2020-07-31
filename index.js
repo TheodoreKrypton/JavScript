@@ -19,6 +19,7 @@ const interval = setInterval(() => {
   wss.clients.forEach((ws) => {
     if (ws.isAlive === false) return ws.terminate();
 
+    // eslint-disable-next-line no-param-reassign
     ws.isAlive = false;
     ws.ping(noop);
   });

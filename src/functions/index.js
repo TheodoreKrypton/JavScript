@@ -1,5 +1,11 @@
+const { searchByActress } = require('./searchByActress');
+const { getNewlyReleased } = require('./getNewlyReleased');
+const { searchByCode } = require('./searchByCode');
+const { searchMagnet } = require('./searchMagnet');
+
 module.exports = {
-  searchByActress: require('./searchByActress').searchByActress,
-  getNewlyReleased: require('./getNewlyReleased').getNewlyReleased,
-  searchByCode: require('./searchByCode').searchByCode,
+  searchByActress,
+  getNewlyReleased,
+  searchByCode,
+  searchMagnet,
 };

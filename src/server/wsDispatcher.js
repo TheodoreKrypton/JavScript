@@ -1,4 +1,3 @@
-const sources = require('../sources');
 const functions = require('../functions');
 
 const dispatch = (ws, msg) => {
@@ -16,6 +15,10 @@ const dispatch = (ws, msg) => {
     }
     case 'search_by_actress': {
       functions.searchByActress(ws, reqId, args.actress);
+      break;
+    }
+    case 'search_magnet_by_code': {
+      functions.searchMagnet(ws, reqId, args.code);
       break;
     }
     default:

@@ -12,25 +12,31 @@ module.exports = {
       httpAgent: new http.Agent({ keepAlive: true }),
       httpsAgent: new https.Agent({ keepAlive: true }),
     });
+
+    const makeConfig = (config) => {
+      if (!config) {
+        return { headers: { 'User-Agent': ua } };
+      }
+
+      if (!config.headers) {
+        return { headers: { 'User-Agent': ua }, ...config };
+      }
+
+      if (!config.headers['User-Agent']) {
+        return { ...config, headers: { 'User-Agent': ua, ...config.headers } };
+      }
+      return config;
+    };
+
     return {
       get(url, config) {
         const u = url.startsWith('http') ? url : `${baseUrl}${url}`;
-        return requester.get(u, {
-          headers: {
-            'User-Agent': ua,
-          },
-          ...config,
-        });
+        return requester.get(u, makeConfig(config));
       },
 
       post(url, data, config) {
         const u = url.startsWith('http') ? url : `${baseUrl}${url}`;
-        return requester.post(u, data, {
-          headers: {
-            'User-Agent': ua,
-          },
-          ...config,
-        });
+        return requester.post(u, data, makeConfig(config));
       },
     };
   },

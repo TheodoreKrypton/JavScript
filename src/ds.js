@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 class AV {
   constructor() {
     this.code = null;

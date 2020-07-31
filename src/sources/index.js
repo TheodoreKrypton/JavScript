@@ -5,6 +5,7 @@ const indexav = require('./indexav');
 const youav = require('./youav');
 const highporn = require('./highporn');
 const javhdporn = require('./javhdporn');
+const javbus = require('./javbus');
 
 module.exports = {
   javmost,
@@ -14,4 +15,5 @@ module.exports = {
   youav,
   highporn,
   javhdporn,
+  javbus,
 };
