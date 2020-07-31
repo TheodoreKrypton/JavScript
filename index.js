@@ -1,24 +1,22 @@
-'use strict'
-
 const WebSocket = require('ws');
+const server = require('http').createServer();
 const wsDispatcher = require('./src/server/wsDispatcher');
 const httpDispatcher = require('./src/server/httpDispatcher');
-let server = require('http').createServer();
 
-const wss = new WebSocket.Server({ path: "/ws/", server: server });
+const wss = new WebSocket.Server({ path: '/ws/', server });
 server.on('request', httpDispatcher);
 
-wss.on('connection', function connection(ws) {
-  console.log("connected");
-  ws.on('message', function incoming(message) {
+wss.on('connection', (ws) => {
+  console.log('connected');
+  ws.on('message', (message) => {
     wsDispatcher.dispatch(ws, JSON.parse(message));
   });
 });
 
 function noop() { }
 
-const interval = setInterval(function ping() {
-  wss.clients.forEach(function each(ws) {
+const interval = setInterval(() => {
+  wss.clients.forEach((ws) => {
     if (ws.isAlive === false) return ws.terminate();
 
     ws.isAlive = false;
@@ -26,12 +24,12 @@ const interval = setInterval(function ping() {
   });
 }, 30000);
 
-wss.on('close', function close() {
+wss.on('close', () => {
   clearInterval(interval);
 });
 
 const port = 8081;
 
-server.listen(port, function () {
+server.listen(port, () => {
   console.log(`server listening on ${port}`);
 });

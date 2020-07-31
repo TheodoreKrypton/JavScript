@@ -16,7 +16,11 @@
     "url": "https://github.com/TheodoreKrypton/javscript/issues"
   },
   "homepage": "https://github.com/TheodoreKrypton/javscript#readme",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
+  },
   "dependencies": {
     "axios": "^0.19.2",
     "express": "^4.17.1",

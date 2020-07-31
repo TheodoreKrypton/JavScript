@@ -1,7 +1,7 @@
 const sources = require('../sources');
 
-const getNewlyReleased = (ws, reqId, page) => {
-  sources.javmost.getNewlyReleased(page).then((response) => {
+const getBrief = (ws, reqId, code) => {
+  sources.indexav.getBrief(code).then((response) => {
     if (response) {
       ws.send(JSON.stringify({ response, reqId }));
     }
@@ -9,5 +9,5 @@ const getNewlyReleased = (ws, reqId, page) => {
 };
 
 module.exports = {
-  getNewlyReleased,
+  getBrief,
 };

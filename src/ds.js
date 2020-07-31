@@ -1,5 +1,3 @@
-'use strict'
-
 class AV {
   constructor() {
     this.code = null;
@@ -30,5 +28,5 @@ class Actress {
 }
 
 module.exports = {
-  AV, Magnet, Actress
-}
+  AV, Magnet, Actress,
+};

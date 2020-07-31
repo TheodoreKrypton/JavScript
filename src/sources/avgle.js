@@ -1,9 +1,7 @@
-'use strict'
+const utils = require('./utils');
+const ds = require('../ds');
 
-const utils = require("./utils");
-const ds = require("../ds");
-
-const requester = utils.requester("https://api.avgle.com")
+const requester = utils.requester('https://api.avgle.com');
 
 const searchByCode = async (code) => {
   const rsp = await requester.get(`/v1/search/${code}/0?limit=1`);
@@ -15,11 +13,10 @@ const searchByCode = async (code) => {
     av.code = code;
     av.preview_img_url = video.preview_url;
     return av;
-  } else {
-    return null;
   }
-}
+  return null;
+};
 
 module.exports = {
-  searchByCode
+  searchByCode,
 };

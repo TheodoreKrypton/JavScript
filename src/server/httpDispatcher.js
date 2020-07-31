@@ -1,8 +1,7 @@
-'use strict'
+const express = require('express');
 
-let express = require('express');
-let app = express();
-let bodyParser = require('body-parser');
+const app = express();
+const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 
@@ -13,16 +12,15 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  let message = req.body.message;
+  const { message } = req.body;
   console.log('Regular POST message: ', message);
   return res.json({
-    answer: 42
+    answer: 42,
   });
 });
 
 app.get('/redirect_to', (req, res) => {
   res.redirect(req.query.url);
-})
-
+});
 
 module.exports = app;
