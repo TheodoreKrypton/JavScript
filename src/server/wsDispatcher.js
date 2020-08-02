@@ -1,8 +1,14 @@
 const functions = require('../functions');
+const auth = require('./authenticate');
 
 const dispatch = (ws, msg) => {
   console.log(msg);
-  const { message, reqId } = msg;
+  const { message, reqId, userpass } = msg;
+
+  if (!auth.checkToken(userpass)) {
+    return;
+  }
+
   const { api, args } = message;
   switch (api) {
     case 'search_by_code': {

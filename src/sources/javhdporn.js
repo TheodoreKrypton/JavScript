@@ -25,12 +25,16 @@ const searchByCode = async (code) => {
   const rsp2 = await requester.get(url);
   const dom2 = new JSDOM(rsp2.data);
 
+  av.title = utils.noexcept(() => dom2.window.document.querySelector('h1').textContent);
+  if (!av.title.includes(code)) {
+    return null;
+  }
+
   av.video_url = utils.noexcept(() => dom2.window.document.querySelector('.yoast-schema-graph').textContent.match(regexes.embedUrl)[1]);
   if (!av.video_url) {
     return null;
   }
 
-  av.title = utils.noexcept(() => dom2.window.document.querySelector('h1').textContent);
   av.actress = [...dom2.window.document.querySelector('#video-actors').querySelectorAll('a')].map((a) => a.textContent.trim());
   return av;
 };
