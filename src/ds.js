@@ -24,7 +24,6 @@ class Actress {
     this.img = null;
     this.height = null;
     this.weight = null;
-    this.aliases = [];
   }
 }
 

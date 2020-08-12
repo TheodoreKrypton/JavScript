@@ -13,13 +13,15 @@ app.use(express.json());
 
 const beforeRequest = (req, res, next) => {
   logger.info({
-    ip: req.connection.remoteAddress,
-    method: req.method,
-    path: req.originalUrl,
-    query: req.query,
-    body: req.body,
+    http: {
+      ip: req.connection.remoteAddress,
+      method: req.method,
+      path: req.originalUrl,
+      query: req.query,
+      body: req.body,
+    },
   });
-  if (req.originalUrl === '/auth_by_password') {
+  if (req.method !== 'POST' || req.originalUrl === '/auth_by_password') {
     next();
     return;
   }

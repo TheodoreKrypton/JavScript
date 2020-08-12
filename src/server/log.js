@@ -18,7 +18,8 @@ const logger = bunyan.createLogger({
       path: `${logPath}${path.sep}javpy.log`,
       period: '1d',
       count: 30,
-    }],
+    },
+  ],
 });
 
 module.exports = {

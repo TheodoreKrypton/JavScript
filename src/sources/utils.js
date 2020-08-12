@@ -31,12 +31,14 @@ module.exports = {
     return {
       get(url, config) {
         const u = url.startsWith('http') ? url : `${baseUrl}${url}`;
-        return requester.get(u, makeConfig(config));
+        return requester.get(u, makeConfig(config))
+          .catch((err) => console.error(err.message));
       },
 
       post(url, data, config) {
         const u = url.startsWith('http') ? url : `${baseUrl}${url}`;
-        return requester.post(u, data, makeConfig(config));
+        return requester.post(u, data, makeConfig(config))
+          .catch((err) => console.error(err.message));
       },
     };
   },

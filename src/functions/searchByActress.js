@@ -1,27 +1,19 @@
 const sources = require('../sources');
-
-const guessLang = (actress) => {
-  for (let i = 0; i < actress.length; i += 1) {
-    const charCode = actress.charCodeAt(i);
-    if (charCode >= 128) {
-      return 'jp';
-    }
-  }
-  return 'en';
-};
+const utils = require('./utils');
 
 const searchByActress = async (ws, reqId, actress) => {
-  const lang = guessLang(actress);
+  const lang = utils.guessLang(actress);
   if (lang === 'en') {
-    // eslint-disable-next-line no-param-reassign
-    actress = await sources.warashiAsianPornstarsFr.translate2Jp(actress);
+    try {
+      // eslint-disable-next-line no-param-reassign
+      actress = await sources.warashiAsianPornstarsFr.translate2Jp(actress);
+    } catch (err) {
+      console.error(err);
+    }
     if (!actress) {
-      ws.send(JSON.stringify({ response: 'not found', reqId }));
+      utils.notFound(ws, reqId);
     }
   }
-  sources.warashiAsianPornstarsFr.getActressInfo(actress).then((rsp) => {
-    ws.send(JSON.stringify({ response: rsp, reqId }));
-  });
 
   let something = false;
   await Promise.allSettled([
@@ -44,7 +36,7 @@ const searchByActress = async (ws, reqId, actress) => {
     }
   })));
   if (!something) {
-    ws.send(JSON.stringify({ response: 'not found', reqId }));
+    utils.notFound(ws, reqId);
   }
 };
 

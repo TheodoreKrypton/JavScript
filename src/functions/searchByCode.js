@@ -1,4 +1,5 @@
 const sources = require('../sources');
+const utils = require('./utils');
 
 const searchByCode = async (ws, reqId, code) => {
   let something = false;
@@ -28,7 +29,7 @@ const searchByCode = async (ws, reqId, code) => {
     console.error(err.message);
   })));
   if (!something) {
-    ws.send(JSON.stringify({ response: 'not found', reqId }));
+    utils.notFound(ws, reqId);
   }
 };
 

@@ -4,12 +4,17 @@ const ds = require('../ds');
 const { noexcept } = require('./utils');
 
 const requester = utils.requester('http://warashi-asian-pornstars.fr');
-const actressDetailUrl = {};
+const cached = {
+  actressDetailUrl: {},
+  alias: {},
+  actressInfo: {},
+};
 
 const getNameInCard = (name, card) => {
   if (!card) {
     return null;
   }
+
   if (!card.textContent.toLowerCase().includes(name)) {
     return null;
   }
@@ -23,38 +28,30 @@ const getNameInCard = (name, card) => {
 
   // cache for parsing actress info later, None for no url
   const url = noexcept(() => card.querySelector('a').href);
-  actressDetailUrl[name] = url;
-  actressDetailUrl[jpName] = url;
+  cached.actressDetailUrl[name] = url;
+  cached.actressDetailUrl[jpName] = url;
 
   return jpName;
 };
 
 const translate2Jp = async (actress) => {
   const payload = `recherche_critere=f&recherche_valeur=${encodeURIComponent(actress)}`;
+
   const rsp = await requester.post('/en/s-12/search', payload, {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
-  const dom = new JSDOM(rsp.data);
+  const dom = new JSDOM(rsp.data).window.document;
   const actressLower = actress.toLowerCase();
 
-  let name = getNameInCard(actressLower, dom.window.document.querySelector('.bloc-resultats'));
-  if (name) {
-    return name;
-  }
+  const name = getNameInCard(actressLower, dom.querySelector('.resultat-pornostar'))
+    || getNameInCard(actressLower, utils.noexcept(() => dom.querySelector('#bloc-resultats-conteneur-pornostars').querySelector('.resultat-pornostar')))
+    || getNameInCard(actressLower, utils.noexcept(() => dom.querySelector('#bloc-resultats-conteneur-castings').querySelector('.resultat-pornostar')));
 
-  name = getNameInCard(actressLower, dom.window.document.querySelector('#bloc-resultats-conteneur-pornostars > .resultat-pornostar'));
-  if (name) {
-    return name;
-  }
+  if (name) return name;
 
-  name = getNameInCard(actressLower, dom.window.document.querySelector('#bloc-resultats-conteneur-castings > .resultat-pornostar'));
-  if (name) {
-    return name;
-  }
-
-  actressDetailUrl[name] = null;
+  cached.actressDetailUrl[name] = null;
   return null;
 };
 
@@ -73,88 +70,118 @@ const getBriefFromTr = (tr) => {
 
 const searchByActress = async (actress) => {
   const actressLower = actress.toLowerCase();
-  if (actressDetailUrl[actressLower] === undefined) {
+  if (cached.actressDetailUrl[actressLower] === undefined) {
     await translate2Jp(actress);
   }
-  if (!actressDetailUrl[actressLower]) {
+  if (!cached.actressDetailUrl[actressLower]) {
     return [];
   }
-  const rsp = await requester.get(actressDetailUrl[actressLower].replace('/s-2-0/', '/s-2-4/'));
-  const dom = new JSDOM(rsp.data);
-  const trs = [...dom.window.document.querySelector('table').querySelectorAll('tr')];
+  const rsp = await requester.get(cached.actressDetailUrl[actressLower].replace('/s-2-0/', '/s-2-4/'));
+  const dom = new JSDOM(rsp.data).window.document;
+  const trs = [...dom.querySelector('table').querySelectorAll('tr')];
   const res = trs.slice(1, trs.length).map(getBriefFromTr);
   return res;
 };
 
-const parseDetailPage = async (url) => {
-  const rsp = await requester.get(url);
-  const dom = new JSDOM(rsp.data);
-  const actressInfo = new ds.Actress();
-  let img = dom.window.document.querySelector('#pornostar-profil-photos');
-  if (img) {
-    actressInfo.img = `http://warashi-asian-pornstars.fr/${img.querySelector('img').src}`;
-  } else {
-    img = dom.window.document.querySelector('#casting-profil-preview');
-    if (img) {
-      actressInfo.img = `http://warashi-asian-pornstars.fr${img.querySelector('img').src}`;
-    }
-  }
-
-  const infoField = dom.window.document.querySelector('#pornostar-profil-infos');
-
-  if (!infoField) {
-    return null;
-  }
-
-  const aliases = new Set();
-  const h1 = dom.window.document.querySelector('h1');
-  const mainName = h1.querySelectorAll('span')[1].textContent;
-  aliases.add(mainName);
-
-  const div = infoField.querySelector('#pornostar-profil-noms-alternatifs');
-  if (div) {
-    const names = [...div.querySelectorAll('li')].map((li) => {
-      const spans = li.querySelectorAll('span');
-      if (spans.length === 0) {
-        return null;
-      }
-      return spans[1].textContent.trim();
-    }).filter((x) => x !== null);
-    names.forEach((name) => {
-      aliases.add(name);
-    });
-  }
-
-  actressInfo.aliases = [...aliases];
-  const ps = infoField.querySelectorAll('p');
-  ps.forEach((p) => {
-    if (p.textContent.includes('birthdate')) {
-      actressInfo.birth_date = p.querySelector('time').getAttribute('content');
-    }
-    if (p.getAttribute('itemprop')) {
-      if (p.getAttribute('itemprop') === 'height') {
-        actressInfo.height = p.querySelector('span').textContent.trim();
-      } else if (p.getAttribute('itemprop') === 'weight') {
-        actressInfo.weight = p.querySelector('span').textContent.trim();
-      }
-    }
-  });
-  return actressInfo;
-};
-
-const getActressInfo = async (actress) => {
+const parseDetailPage = async (actress) => {
   const actressLower = actress.toLowerCase();
-  if (actressDetailUrl[actressLower] === undefined) {
+  if (cached.actressInfo[actressLower] !== undefined && cached.alias[actressLower] !== undefined) {
+    return;
+  }
+
+  if (cached.actressDetailUrl[actressLower] === undefined) {
     await translate2Jp(actress);
   }
-  if (actressDetailUrl[actressLower] === null) {
-    return null;
+  const url = cached.actressDetailUrl[actressLower];
+  if (!url) {
+    return;
   }
-  return parseDetailPage(actressDetailUrl[actressLower]);
+  const rsp = await requester.get(url);
+  const dom = new JSDOM(rsp.data).window.document;
+
+  const actressInfo = new ds.Actress();
+  const img = dom.querySelector('#pornostar-profil-photos') || dom.querySelector('#casting-profil-preview');
+  if (img) {
+    actressInfo.img = `http://warashi-asian-pornstars.fr/${img.querySelector('img').src}`;
+  }
+
+  const infoField = dom.querySelector('#pornostar-profil-infos');
+
+  if (!infoField) {
+    cached.actressInfo[actressLower] = null;
+    cached.alias[actressLower] = null;
+    cached.actressInfo[actressLower] = actressInfo;
+    return;
+  }
+
+  if (cached.actressInfo[actressLower] === undefined) {
+    const ps = infoField.querySelectorAll('p');
+    ps.forEach((p) => {
+      try {
+        if (p.textContent.includes('birthdate')) {
+          actressInfo.birth_date = p.querySelector('time').getAttribute('content');
+        }
+        if (p.getAttribute('itemprop')) {
+          if (p.getAttribute('itemprop') === 'height') {
+            actressInfo.height = p.querySelector('span').textContent.trim();
+          } else if (p.getAttribute('itemprop') === 'weight') {
+            actressInfo.weight = p.querySelector('span').textContent.trim();
+          }
+        }
+        // eslint-disable-next-line no-empty
+      } catch { }
+    });
+
+    cached.actressInfo[actressLower] = actressInfo;
+  }
+
+  if (cached.alias[actressLower] === undefined) {
+    const aliases = new Set();
+    const h1 = dom.querySelector('h1');
+    const mainName = h1.querySelectorAll('span')[1].textContent;
+    aliases.add(mainName);
+
+    const div = infoField.querySelector('#pornostar-profil-noms-alternatifs');
+    if (div) {
+      const names = [...div.querySelectorAll('li')].map((li) => {
+        const spans = li.querySelectorAll('span');
+        if (spans.length === 0) {
+          return null;
+        }
+        return spans[1].textContent.trim();
+      }).filter((x) => x !== null);
+      names.forEach((name) => {
+        aliases.add(name);
+      });
+
+      aliases.forEach((alias) => {
+        cached.alias[alias.toLowerCase()] = aliases;
+        cached.actressInfo[alias.toLowerCase()] = cached.actressInfo[actressLower];
+      });
+    } else {
+      cached.alias[actressLower] = null;
+    }
+
+    cached.alias[actressLower] = aliases;
+  }
+};
+
+const getActressProfile = async (actress) => {
+  await parseDetailPage(actress);
+  return cached.actressInfo[actress.toLowerCase()];
+};
+
+const getAliases = async (actress) => {
+  await parseDetailPage(actress);
+  if (cached.alias[actress.toLowerCase()]) {
+    return [...cached.alias[actress.toLowerCase()]];
+  }
+  return null;
 };
 
 module.exports = {
   searchByActress,
   translate2Jp,
-  getActressInfo,
+  getActressProfile,
+  getAliases,
 };
