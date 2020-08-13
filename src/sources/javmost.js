@@ -85,6 +85,9 @@ const searchByCode = async (code) => {
 
 const getNewlyReleased = async (page) => {
   const rsp = await requester.get(`/showlist/new/${page}/release`);
+  if (!rsp.data) {
+    return [];
+  }
   const html = rsp.data.data;
   const dom = new JSDOM(html);
   return [...dom.window.document.querySelectorAll('.card')].map((card) => {
