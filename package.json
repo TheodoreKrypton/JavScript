@@ -18,11 +18,11 @@
   "homepage": "https://github.com/TheodoreKrypton/javscript#readme",
   "devDependencies": {
     "browserify": "^16.5.2",
+    "electron": "^9.2.0",
     "eslint": "^7.5.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-react": "^7.20.6",
-    "tinyify": "^3.0.0"
+    "pkg": "^4.4.9"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -34,5 +34,12 @@
     "jsdom": "^16.3.0",
     "level-rocksdb": "^4.0.0",
     "ws": "^7.3.1"
+  },
+  "pkg": {
+    "scripts": "./index.js",
+    "assets": "./frontend/build/"
+  },
+  "bin": {
+    "javpy": "./index.js"
   }
 }

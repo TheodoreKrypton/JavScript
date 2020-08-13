@@ -85,7 +85,7 @@ const searchByCode = async (code) => {
 
 const getNewlyReleased = async (page) => {
   const rsp = await requester.get(`/showlist/new/${page}/release`);
-  if (!rsp.data) {
+  if (!rsp || !rsp.data) {
     return [];
   }
   const html = rsp.data.data;

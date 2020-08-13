@@ -36,11 +36,14 @@ const beforeRequest = (req, res, next) => {
 
 app.use(beforeRequest);
 
+const FRONTEND_ROOT = './frontend/build';
+
 app.get('/', (req, res) => {
-  console.log('Get index');
-  fs.createReadStream('./index.html')
+  fs.createReadStream(`${FRONTEND_ROOT}/index.html`)
     .pipe(res);
 });
+
+app.use(express.static('./frontend/build/'));
 
 // app.post('/', (req, res) => {
 //   const { message } = req.body;
