@@ -1,0 +1,14 @@
+FROM node:buster as build
+
+WORKDIR /
+
+RUN git clone https://github.com/TheodoreKrypton/javscript.git
+RUN cd /javscript && git submodule init && git submodule update
+RUN cd /javscript/frontend/ && npm install && npm run build
+RUN cd /javscript && npm install && npm run build
+
+FROM buster:slim
+
+COPY --from=build /javscript/build/javscript-linux .
+
+CMD ["./javscript-linux"]

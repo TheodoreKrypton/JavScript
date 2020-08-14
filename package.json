@@ -4,7 +4,8 @@
   "description": "JavPy in Node.js",
   "main": "index.js",
   "scripts": {
-    "test": "node.exe index.js"
+    "test": "node.exe index.js",
+    "build": "pkg . --out-path=./build/"
   },
   "repository": {
     "type": "git",
