@@ -1,7 +1,7 @@
 const sources = require('../sources');
 const utils = require('./utils');
 
-const searchByActress = async (ws, reqId, actress) => {
+const searchByActress = async (ws, reqId, { actress }) => {
   const lang = utils.guessLang(actress);
   if (lang === 'en') {
     try {

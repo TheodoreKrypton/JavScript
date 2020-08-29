@@ -13,33 +13,19 @@ const dispatch = (ws, msg) => {
     }
 
     const { api, args } = message;
-    switch (api) {
-      case 'search_by_code': {
-        functions.searchByCode(ws, reqId, args.code);
-        break;
-      }
-      case 'get_newly_released': {
-        functions.getNewlyReleased(ws, reqId, args.page);
-        break;
-      }
-      case 'search_by_actress': {
-        functions.searchByActress(ws, reqId, args.actress);
-        break;
-      }
-      case 'search_magnet_by_code': {
-        functions.searchMagnet(ws, reqId, args.code);
-        break;
-      }
-      case 'get_aliases': {
-        functions.getAliases(ws, reqId, args.actress);
-        break;
-      }
-      case 'get_actress_profile': {
-        functions.getActressProfile(ws, reqId, args.actress);
-        break;
-      }
-      default:
-        break;
+
+    const routes = {
+      search_by_code: functions.searchByCode,
+      get_newly_released: functions.getNewlyReleased,
+      search_by_actress: functions.searchByActress,
+      search_magnet_by_code: functions.searchMagnet,
+      get_aliases: functions.getAliases,
+      get_actress_profile: functions.getActressProfile,
+      get_brief: functions.getBrief,
+    };
+
+    if (routes[api]) {
+      routes[api](ws, reqId, args);
     }
   } catch (err) {
     logger.error(err.message);

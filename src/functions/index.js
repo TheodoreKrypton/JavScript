@@ -4,6 +4,7 @@ const { searchByCode } = require('./searchByCode');
 const { searchMagnet } = require('./searchMagnet');
 const { getActressProfile } = require('./getActressProfile');
 const { getAliases } = require('./getAliases');
+const { getBrief } = require('./getBrief');
 
 module.exports = {
   searchByActress,
@@ -12,4 +13,5 @@ module.exports = {
   searchMagnet,
   getActressProfile,
   getAliases,
+  getBrief,
 };

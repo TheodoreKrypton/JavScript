@@ -1,7 +1,7 @@
 const sources = require('../sources');
 const utils = require('./utils');
 
-const getAliases = (ws, reqId, actress) => {
+const getAliases = (ws, reqId, { actress }) => {
   sources.warashiAsianPornstarsFr.getAliases(actress).then((rsp) => {
     if (rsp) {
       ws.send(JSON.stringify({ response: rsp, reqId }));

@@ -85,7 +85,6 @@ app.post('/update_config', (req, res) => {
     cfg['hashed-password'] = req.body.password;
   }
   cfg['ip-whitelist'] = req.body['ip-whitelist'];
-  console.log(cfg);
   config.set(cfg);
   res.send('');
 });

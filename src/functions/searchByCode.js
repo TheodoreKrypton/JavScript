@@ -1,7 +1,7 @@
 const sources = require('../sources');
 const utils = require('./utils');
 
-const searchByCode = async (ws, reqId, code) => {
+const searchByCode = async (ws, reqId, { code }) => {
   let something = false;
   await Promise.allSettled([
     sources.javmost,

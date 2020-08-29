@@ -1,14 +1,20 @@
 const sources = require('../sources');
 const utils = require('./utils');
 
-const searchMagnet = (ws, reqId, code) => {
-  sources.javbus.searchMagnet(code).then((response) => {
-    if (response) {
+const searchMagnet = async (ws, reqId, { code }) => {
+  let something = false;
+  await Promise.allSettled([sources.javbus, sources.javdb].map(
+    (source) => source.searchMagnet(code).then((response) => {
+      if (!response) {
+        return;
+      }
+      something = true;
       ws.send(JSON.stringify({ response, reqId }));
-    } else {
-      utils.notFound(ws, reqId);
-    }
-  });
+    }),
+  ));
+  if (!something) {
+    utils.notFound(ws, reqId);
+  }
 };
 
 module.exports = {

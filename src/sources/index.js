@@ -7,6 +7,7 @@ const highporn = require('./highporn');
 const javhdporn = require('./javhdporn');
 const javbus = require('./javbus');
 const javlibrary = require('./javlibrary');
+const javdb = require('./javdb');
 
 module.exports = {
   javmost,
@@ -18,4 +19,5 @@ module.exports = {
   javhdporn,
   javbus,
   javlibrary,
+  javdb,
 };
