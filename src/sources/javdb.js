@@ -49,7 +49,10 @@ const getBrief = async (code) => {
         break;
       }
       case '演員:': {
-        brief.actress = div.querySelector('.value').textContent.trim().split(',').map((actress) => actress.trim());
+        const actresses = div.querySelector('.value').textContent.trim();
+        if (actresses !== 'N/A') {
+          brief.actress = actresses.split(',').map((actress) => actress.trim());
+        }
         break;
       }
       default: {
@@ -76,7 +79,27 @@ const searchMagnet = async (code) => {
   });
 };
 
+const getNewlyReleased = async (page) => {
+  const censoredUrl = `/?page=${page}&vft=0`;
+  const uncensoredUrl = `/uncensored?page=${page}&vft=0`;
+
+  return (await Promise.allSettled([censoredUrl, uncensoredUrl].map(
+    (url) => requester.get(url).then((rsp) => {
+      const dom = new JSDOM(rsp.data).window.document;
+      return [...dom.querySelector('#videos').querySelectorAll('.grid-item')].map((video) => {
+        const av = new ds.AV();
+        av.title = video.querySelector('.video-title').textContent.trim();
+        av.code = video.querySelector('.uid').textContent.trim();
+        av.release_date = video.querySelector('.meta').textContent.trim();
+        av.preview_img_url = utils.noexcept(() => video.querySelector('img').getAttribute('data-src'));
+        return av;
+      });
+    }).catch(() => []),
+  ))).reduce((a, b) => a.value.concat(b.value));
+};
+
 module.exports = {
   getBrief,
   searchMagnet,
+  getNewlyReleased,
 };
