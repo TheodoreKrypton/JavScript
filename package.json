@@ -1,6 +1,6 @@
 {
   "name": "javpy",
-  "version": "0.7",
+  "version": "0.7.0",
   "description": "JavPy in Node.js",
   "main": "index.js",
   "scripts": {
