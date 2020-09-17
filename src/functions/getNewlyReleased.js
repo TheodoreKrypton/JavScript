@@ -1,8 +1,8 @@
 const sources = require('../sources');
 const utils = require('./utils');
 
-const getNewlyReleased = (ws, reqId, { page }) => {
-  [sources.javlibrary, sources.javmost, sources.javdb].forEach(
+const getNewlyReleased = async (ws, reqId, { page }) => {
+  await Promise.allSettled([sources.javlibrary, sources.javmost, sources.javdb].map(
     (source) => source.getNewlyReleased(page).then((response) => {
       if (response) {
         ws.send(JSON.stringify({ response, reqId }));
@@ -11,7 +11,7 @@ const getNewlyReleased = (ws, reqId, { page }) => {
       utils.notFound(ws, reqId);
       throw err;
     }),
-  );
+  ));
 };
 
 module.exports = {
