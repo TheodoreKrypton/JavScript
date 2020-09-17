@@ -3,9 +3,18 @@ const fs = require('fs');
 const sha256 = require('js-sha256');
 const cors = require('cors');
 const path = require('path');
+const yargs = require('yargs');
 const auth = require('./authenticate');
 const config = require('./config');
 const { logger } = require('./log');
+
+const { argv } = yargs
+  .option('fe', {
+    alias: 'f',
+    description: 'frontend root',
+    default: '',
+    type: 'string',
+  });
 
 const app = express();
 
@@ -37,7 +46,7 @@ const beforeRequest = (req, res, next) => {
 
 app.use(beforeRequest);
 
-const FRONTEND_ROOT = path.join(__dirname, '../../frontend/build');
+const FRONTEND_ROOT = path.join(argv.fe ? argv.fe : path.join(__dirname, '../../frontend/'), 'build/');
 
 app.get('/', (req, res) => {
   fs.createReadStream(`${FRONTEND_ROOT}/index.html`)
