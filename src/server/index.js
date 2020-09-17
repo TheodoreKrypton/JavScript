@@ -1,7 +1,9 @@
+// eslint-disable-file
+
 const WebSocket = require('ws');
 const server = require('http').createServer();
-const wsDispatcher = require('./src/server/wsDispatcher');
-const httpDispatcher = require('./src/server/httpDispatcher');
+const wsDispatcher = require('./wsDispatcher');
+const httpDispatcher = require('./httpDispatcher');
 
 const wss = new WebSocket.Server({ path: '/ws/', server });
 server.on('request', httpDispatcher);
@@ -30,8 +32,16 @@ wss.on('close', () => {
 });
 
 const run = (port, cb) => {
+  console.log(
+    '       __            ____       \n'
+    + '      / /___ __   __/ __ \\__  __\n'
+    + ' __  / / __ `/ | / / /_/ / / / /\n'
+    + '/ /_/ / /_/ /| |/ / ____/ /_/ / \n'
+    + '\\____/\\__,_/ |___/_/    \\__, /  \n'
+    + '                       /____/   \n',
+  );
   server.listen(port, '0.0.0.0', () => {
-    console.log(`server listening on ${port}`);
+    console.log(`server listening on ${port} `);
     if (cb) {
       cb();
     }

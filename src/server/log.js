@@ -1,7 +1,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const bunyan = require('bunyan');
+const bunyan = require('bunyan-sfdx-no-dtrace');
 
 const logPath = `${os.homedir()}${path.sep}.JavPy${path.sep}logs`;
 

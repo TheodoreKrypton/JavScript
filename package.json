@@ -1,8 +1,7 @@
 {
   "name": "javpy",
-  "version": "0.7.0",
+  "version": "0.7.2",
   "description": "JavPy in Node.js",
-  "main": "index.js",
   "scripts": {
     "test": "mocha ./test/test.js --timeout 60000",
     "coverage": "nyc --reporter=lcov mocha --timeout 60000 && codecov -t ${CODECOV_TOKEN}",
@@ -30,7 +29,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "bunyan": "^1.8.14",
+    "bunyan-sfdx-no-dtrace": "^1.8.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "ip-range-check": "^0.2.0",
@@ -42,10 +41,10 @@
     "yargs": "^16.0.3"
   },
   "pkg": {
-    "scripts": "./index.js",
+    "scripts": "./bin/javpy.js",
     "assets": "./frontend/build/"
   },
   "bin": {
-    "javpy": "./index.js"
+    "javpy": "./bin/javpy.js"
   }
 }

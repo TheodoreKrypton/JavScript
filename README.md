@@ -8,9 +8,7 @@
 ### With Git
 ```bash
 $ git clone https://github.com/TheodoreKrypton/javscript
-$ npm install --only=prod
-$ git submodule update --init --remote --recursive
-$ cd ./frontend/ && npm install --only=prod && npm run build
+$ npm install -g --only=prod
 ```
 
 ## Usage

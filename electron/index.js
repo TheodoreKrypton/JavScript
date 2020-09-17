@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { app, BrowserWindow } = require('electron');
-const server = require('../server');
+const server = require('../src/server');
 
 const PORT = 8081;
 
