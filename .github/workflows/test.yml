@@ -5,7 +5,7 @@ on: [push, pull_request]
 
 jobs:
   test:
-    name: ${{ matrix.node-version }} @ ${{ matrix.platform }}
+    name: ${{ matrix.node }} @ ${{ matrix.platform }}
     strategy:
       max-parallel: 4
       fail-fast: false
