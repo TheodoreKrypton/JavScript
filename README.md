@@ -9,18 +9,16 @@
 ```bash
 $ git clone https://github.com/TheodoreKrypton/javscript
 $ npm install -g --only=prod
+$ javpy --port 8081
 ```
 
 ### With npm
 ```bash
 $ npm install -g --only=prod javpy
+$ javpy --port 8081
 ```
 
-## Usage
+### With Docker
 ```bash
-$ javpy
-```
-or
-```bash
-$ javpy --port 8081
+$ docker run -p 8081:8081 wheatcarrier/javscript:latest
 ```
