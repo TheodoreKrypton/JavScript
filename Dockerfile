@@ -2,7 +2,7 @@ FROM node:buster as build
 
 COPY . /javscript
 
-RUN cd /javscript && npm install && npm install -g pkg && npm run build
+RUN cd /javscript && npm install --only=prod --unsafe-perm && npm install -g pkg && npm run build
 
 FROM debian:buster-slim
 
