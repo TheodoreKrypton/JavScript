@@ -1,6 +1,6 @@
 FROM node:buster as build
 
-COPY . /javscript
+COPY .. /javscript
 
 RUN cd /javscript && npm install --only=prod && npm run build
 

@@ -2,7 +2,7 @@
 
 ![Github Actions](https://github.com/TheodoreKrypton/javscript/workflows/test/badge.svg)
 ![codecov](https://codecov.io/gh/TheodoreKrypton/javscript/branch/master/graph/badge.svg)
-
+![npm](https://img.shields.io/npm/v/javpy)
 ## Installation
 
 ### With Git
