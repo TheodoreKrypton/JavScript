@@ -13,7 +13,7 @@ $ npm install -g --only=prod
 
 ### With npm
 ```bash
-$ npm install -g javpy
+$ npm install -g --only=prod javpy
 ```
 
 ## Usage
