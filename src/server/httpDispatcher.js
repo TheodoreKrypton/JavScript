@@ -46,7 +46,7 @@ const beforeRequest = (req, res, next) => {
 
 app.use(beforeRequest);
 
-const FRONTEND_ROOT = path.join(argv.fe ? argv.fe : path.join(__dirname, '../../frontend/'), 'build/');
+const FRONTEND_ROOT = path.join(argv.fe ? argv.fe : path.join(__dirname, '../../frontend/node_modules/javpy-react'), 'build/');
 
 app.get('/', (req, res) => {
   fs.createReadStream(`${FRONTEND_ROOT}/index.html`)
