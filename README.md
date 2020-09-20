@@ -11,6 +11,11 @@ $ git clone https://github.com/TheodoreKrypton/javscript
 $ npm install -g --only=prod
 ```
 
+### With npm
+```bash
+$ npm install -g javpy
+```
+
 ## Usage
 ```bash
 $ javpy

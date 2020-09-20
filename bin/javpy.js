@@ -45,7 +45,7 @@ const openBrowser = () => {
     }).then((res) => {
       res.data.pipe(unzipper.Extract({ path: projectRoot })).on('close', () => {
         console.log('building frontend...');
-        fs.renameSync(path.join(projectRoot, 'JavPy-webfe-websocket'), path.join(projectRoot, 'frontend'));
+        fs.copyFileSync(path.join(projectRoot, 'JavPy-webfe-websocket'), path.join(projectRoot, 'frontend'));
         execSync('cd frontend && npm install --only=prod && npm run build', { stdio: 'inherit' });
         console.log('cleaning...');
         fs.readdirSync(path.join(projectRoot, 'frontend')).forEach((file) => {
