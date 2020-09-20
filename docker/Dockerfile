@@ -6,6 +6,6 @@ RUN cd /javscript && npm install --only=prod && npm run build
 
 FROM debian:buster-slim
 
-COPY --from=build /javscript/build/javscript-linux .
+COPY --from=build /javscript/build/javpy-linux .
 
-CMD ["./javscript-linux"]
+CMD ["./javpy-linux"]
